@@ -17,7 +17,7 @@ contract Catalog{
 
     Product[] public all_products;
     mapping(address => bool) private allowed_accounts;
-
+// fuck you
     constructor() public {
         admin = msg.sender;
         totalProduct = 0;
