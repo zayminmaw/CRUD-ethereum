@@ -2,7 +2,6 @@
 pragma solidity >=0.4.22 <0.9.0;
 
 contract Catalog{
-    address private admin;
     uint256 public totalProduct;
     uint256 private idCount;
 
@@ -17,22 +16,24 @@ contract Catalog{
 
     Product[] public all_products;
     mapping(address => bool) private allowed_accounts;
-// fuck you
+
     constructor() public {
-        admin = msg.sender;
+        allowed_accounts[msg.sender] = true;
         totalProduct = 0;
         idCount = 1;
     }
 
     modifier restricted() {
-        require(msg.sender == admin,"This function is restricted to the admin.");
+        require(approved(msg.sender),"This function is restricted to the admin.");
         _;
     }
-
+    function approved(address acc) public view returns (bool){
+        return allowed_accounts[acc];
+    }
     function registerAdmin(address acc) public restricted{
+       require(!approved(acc),"Account already exist.");
         allowed_accounts[acc] = true;
     }
-
     function read() public view returns (Product[] memory){
         return all_products;
     }
