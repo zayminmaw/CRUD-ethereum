@@ -35,6 +35,7 @@ contract Catalog{
         allowed_accounts[acc] = true;
     }
     function read() public view returns (Product[] memory){
+        
         return all_products;
     }
     function search(string memory _name) public view returns (Product memory){
@@ -48,6 +49,11 @@ contract Catalog{
     }
 
     function newProduct(string memory _brandName,string memory _genericName,string memory _form,string memory _strength,string memory _packaging) public restricted{
+        for(uint256 i = 0 ; i < totalProduct ;i++){
+            if(keccak256(bytes(_brandName))==keccak256(bytes(all_products[i].brandName))){
+                revert("Product already exist1");
+            }
+        }
         all_products.push(Product(idCount,_brandName,_genericName,_form,_strength,_packaging));
         totalProduct++;
         idCount++;
